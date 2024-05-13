@@ -29,6 +29,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      price: {
+        type: Sequelize.INTEGER
+      },
+      payment_method: {
+        type: Sequelize.STRING
+      },
+      status: {
+         type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

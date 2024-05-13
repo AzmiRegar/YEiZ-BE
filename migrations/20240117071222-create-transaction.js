@@ -9,6 +9,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      productID: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'products',
+          key: 'productID'
+        },
+        allowNull:false
+      },
       cartID: {
         type: Sequelize.INTEGER,
         references: {
@@ -17,11 +25,11 @@ module.exports = {
         },
         allowNull:false
       },
-      payment_method: {
-        type: Sequelize.STRING
-      },
       date: {
         type: Sequelize.DATE
+      },
+      price: {
+        type: Sequelize.INTEGER
       },
       total: {
         type: Sequelize.INTEGER

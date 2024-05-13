@@ -10,13 +10,16 @@ exports.addCart = async(request, response) => {
     let userID = request.body.userID;
     let productID = request.body.productID;
     let quantity = request.body.quantity;
+    let price = request.body.price;
+    let payment = request.body.payment_method;
+    let status = request.body.status
 
     // Pastikan user dan product tersedia sebelum menambahkan ke keranjang
     Promise.all([
         userModel.findByPk(userID),
         productModel.findByPk(productID)
     ])
-    .then(([user, product,quantity]) => {
+    .then(([user, product]) => {
         if (!user) {
             throw new Error("User not found");
         }
@@ -30,7 +33,10 @@ exports.addCart = async(request, response) => {
         let newCart = {
             userID: userID,
             productID: productID,
-            quantity: quantity
+            quantity: quantity,
+            price: price,
+            payment_method: payment,
+            status: status
         };
 
         return cartModel.create(newCart);

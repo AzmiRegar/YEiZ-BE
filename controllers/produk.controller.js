@@ -84,7 +84,7 @@ exports.updateProduk = async (request,response) => {
 
         if (request.file) {
             const selectedProduk = await productModel.findOne({
-                where: {produkID:produkID}
+                where: {productID:productID}
             })
 
             const oldImage = selectedProduk.image
@@ -92,7 +92,7 @@ exports.updateProduk = async (request,response) => {
             if(fs.existsSync(pathImage)) {
                 fs.unlink(pathImage, error => console.log(error))
             }
-            dataProduk.image = request.file.filename  
+            dataProduct.image = request.file.filename  
         }
 
         productModel.update(dataProduct, { where: { productID: productID }})

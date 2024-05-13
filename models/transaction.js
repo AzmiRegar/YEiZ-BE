@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasOne(models.detail, {foreignKey: "transID", as: "transDetail"})
+      this.belongsTo(models.product, {foreignKey: "productID"})
       this.belongsTo(models.cart, {foreignKey: "cartID"})
       }
   }
@@ -22,9 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
+    productID: DataTypes.INTEGER,
     cartID: DataTypes.INTEGER,
-    payment_method: DataTypes.STRING,
     date: DataTypes.DATE,
+    price: DataTypes.INTEGER,
     total: DataTypes.INTEGER
   }, {
     sequelize,
