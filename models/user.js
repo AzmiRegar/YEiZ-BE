@@ -11,14 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-       this.hasMany(models.cart, {foreignKey: "userID", as: "userCart"})
-       this.hasOne(models.transaction, {foreignKey: "userID", as: "userTrans"})
+      this.hasMany(models.cart, { foreignKey: "userID", as: "userCart" })
+      this.hasOne(models.transaction, { foreignKey: "userID", as: "userTrans" })
     }
   }
   user.init({
     userID: {
-      allowNull:false,
-      autoIncrement:true,
+      allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
     },

@@ -18,7 +18,10 @@ exports.buyCarts = async (req, res) => {
       });
 
       if (!cart) {
-        throw new Error(`Cart ${cartID} is not available for purchase.`);
+        return res.status(201).json({
+          success: false, 
+          message: "Cart not found!"
+        })
       }
 
       // Add the price of the product to the total harga
@@ -30,6 +33,7 @@ exports.buyCarts = async (req, res) => {
       // Create transaction record
       const detail = await Transaction.create({
         cartID: cart.cartID,
+        userID: cart.userID,
         productID: cart.productID,
         date: new Date(),
         price: cart.price,
@@ -55,18 +59,23 @@ exports.buyCarts = async (req, res) => {
 };
 
 
+exports.getTransactionHistory = async (request, response) => {
+  try {
+    // Mengambil riwayat transaksi pengguna dengan informasi produk yang dibeli
+    const history = await Transaction.findAll({
+      include: [{
+        model: Cart, // Menggunakan model Cart
+        include: [{ model: Product }, {model: User}] // Menyertakan model Product
+      }]
+    });
 
-
-// Controller untuk mendapatkan riwayat transaksi pengguna
-exports.getTransactionHistory = async (req, res) => {
-  try { 
-
-    // Find transaction history for the user including product details
-    const transactions = await Transaction.findAll({});
-
-    res.json(transactions);
+    return response.json({
+      success: true,
+      data: history,
+      message: `All transaction history has been loaded`
+    });
   } catch (error) {
     console.error('Error getting transaction history:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    return response.status(500).json({ error: "Internal Server Error" });
   }
 };
