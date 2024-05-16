@@ -1,4 +1,6 @@
 const { cart: Cart, transaction: Transaction, product: Product, user: User } = require('../models');
+const Op = require(`sequelize`).Op
+
 
 exports.buyCarts = async (req, res) => {
   try {
@@ -77,5 +79,32 @@ exports.getTransactionHistory = async (request, response) => {
   } catch (error) {
     console.error('Error getting transaction history:', error);
     return response.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+exports.showTransbyUser = async (request, response) => {
+  const userId = request.user.userID; // Mengambil ID pengguna dari sesi atau token, sesuaikan dengan implementasi autentikasi Anda
+  try {
+      const transactions = await Transaction.findAll({
+          where: {
+              userID: { [Op.substring]: userId } // Mengambil tiket yang dimiliki oleh pengguna dengan ID yang sesuai
+          },
+          include: [
+              { model: User, attributes: ['firstName', 'lastName'] },
+              { model: Product, attributes: ['product_name', 'type', 'price'] },
+              { model: Cart, attributes: ['quantity', 'payment_method', 'status'] }
+          ]
+      });
+      return response.json({
+          success: true,
+          data: transactions,
+          message: `User's history have been loaded`
+      });
+  } catch (error) {
+      console.error(error);
+      return response.status(500).json({
+          success: false,
+          message: `Failed to load user's history`
+      });
   }
 };

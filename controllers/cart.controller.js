@@ -3,6 +3,7 @@ const { request } = require('express');
 const userModel = require('../models/index').user;
 const productModel = require('../models/index').product;
 const cartModel = require('../models/index').cart;
+const Op = require(`sequelize`).Op
 
 
 // Add to cart
@@ -56,6 +57,31 @@ exports.addCart = async(request, response) => {
     });
 };
 
+exports.showCartbyUser = async (request, response) => {
+    const userId = request.user.userID; // Mengambil ID pengguna dari sesi atau token, sesuaikan dengan implementasi autentikasi Anda
+    try {
+        const carts = await cartModel.findAll({
+            where: {
+                userID: { [Op.substring]: userId } // Mengambil tiket yang dimiliki oleh pengguna dengan ID yang sesuai
+            },
+            include: [
+                { model: userModel, attributes: ['firstName', 'lastName'] },
+                { model: productModel, attributes: ['product_name', 'type', 'price'] }
+            ]
+        });
+        return response.json({
+            success: true,
+            data: carts,
+            message: `User's carts have been loaded`
+        });
+    } catch (error) {
+        console.error(error);
+        return response.status(500).json({
+            success: false,
+            message: `Failed to load user's carts`
+        });
+    }
+};
 
 // Show all cart items
 // exports.showAllCart = async (req, res) => {
@@ -97,36 +123,3 @@ exports.getAllCart = async (request, response) => {
         messaage: `All carts have been loaded`
     })
 }
-
-
-
-
-// Delete cart item
-exports.deleteCart = async (req, res) => {
-    try {
-        const { userID, productID } = req.params;
-        const users = await userModel.findByPk(userID);
-
-        if (!users) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        const carts = await cartModel.findOne({ where: { userID }, include: productModel });
-
-        if (!carts) {
-            return res.status(404).json({ message: 'Cart not found' });
-        }
-
-        const products = cartModel.productModel.find((p) => p.productID === productID);
-
-        if (!products) {
-            return res.status(404).json({ message: 'Product not found in cart' });
-        }
-
-        await productModel.destroy();
-        res.status(200).json({ message: 'Product removed from cart successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error removing product from cart' });
-    }
-};

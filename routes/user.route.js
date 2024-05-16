@@ -10,7 +10,7 @@ app.get("/", authorize, IsAdmin, userController.getAllUser)
 app.get("/:key",  userController.findUser)
 app.post("/", validateUser, userController.addUser)
 app.put("/:id", authorize, IsUser, validateUser, userController.updateUser)
-app.delete("/:id", authorize, IsAdmin, userController.deleteUser)
+app.delete("/:id", authorize, userController.deleteUser)
 app.put("/reset/:id", userController.resetPass)
 app.post("/register", validateUser, userController.register)
 

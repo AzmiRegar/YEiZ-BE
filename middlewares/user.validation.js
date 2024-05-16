@@ -22,14 +22,14 @@ const userValidationSchema = {
       errorMessage: 'Password should be at least 8 chars',
     },
   },
-  address: {
-    notEmpty: true,
-    errorMessage: 'address is required',
-  },
-  number: {
-    notEmpty: true,
-    errorMessage: 'Phone Number is required',
-  }
+  // address: {
+  //   notEmpty: true,
+  //   errorMessage: 'address is required',
+  // },
+  // number: {
+  //   notEmpty: true,
+  //   errorMessage: 'Phone Number is required',
+  // }
 };
 
 // Validation check

@@ -26,7 +26,7 @@ const cartRoute= require(`./routes/cart.route`)
 app.use(`/cart`, cartRoute)
 
 //transaction
-const transRoute = require(`./routes/transaction.route`)
+const   transRoute = require(`./routes/transaction.route`)
 app.use(`/transaction`, transRoute)
 
 //port

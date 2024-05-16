@@ -7,8 +7,8 @@ const { authorize } = require("../controllers/auth.controller")
 
 app.get("/", produkController.getAllProduk)
 app.get("/:key", produkController.findProduk)
-app.post("/", produkController.addProduk)
-app.put("/:id", produkController.updateProduk)
-app.delete("/:id", produkController.deleteProduk)
+app.post("/", authorize, IsAdmin, produkController.addProduk)
+app.put("/:id", authorize, IsAdmin, produkController.updateProduk)
+app.delete("/:id", authorize, IsAdmin, produkController.deleteProduk)
 
 module.exports = app

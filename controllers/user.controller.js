@@ -1,5 +1,6 @@
 const userModel = require(`../models/index`).user
 const { request, response } = require("express")
+const { Result } = require("express-validator")
 const md5 = require(`md5`)
 const Op = require(`sequelize`).Op
 
@@ -81,8 +82,6 @@ exports.register = (request, response) => {
                     firstname: request.body.firstname,
                     lastname: request.body.lastname,
                     email: request.body.email,
-                    number: request.body.number,
-                    address: request.body.address,
                     password: md5(request.body.password),
                     role: "user"
                 };
@@ -132,6 +131,7 @@ exports.updateUser = (request, response) => {
         .then(result => {
             return response.json({
                 success: true,
+                data: dataUser,
                 message: `Data user has been updated`
             })
         })
